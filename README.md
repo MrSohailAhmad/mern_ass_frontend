@@ -1,69 +1,70 @@
-# React + TypeScript + Vite
+# 🌐 Frontend - MERN Appointment Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** part of the MERN Appointment Management System built with **React**, **TypeScript**, **Ant Design**, and **Vite**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📦 Tech Stack
 
-## Expanding the ESLint configuration
+- React (Vite)
+- TypeScript
+- Ant Design UI
+- Axios (with auth interceptors)
+- React Router DOM
+- Context API
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🔧 Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Node.js v18+
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Install Dependencies
+
+```bash
+cd frontend
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2. Configure Environment Variables
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Create a `.env` file in `/frontend` with:
+
+```env
+VITE_BACKEND_URL=http://localhost:3000/api
+```
+
+> ⚠️ Vite requires all env variables to be prefixed with `VITE_`.
+
+---
+
+### 3. Run the App
+
+```bash
+npm run dev
+```
+
+> App will run at: [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 📁 Folder Structure
+
+```
+frontend/
+├── src/
+│   ├── pages/
+│   ├── components/
+│   ├── routes/
+│   ├── context/
+│   ├── services/
+│   ├── interface/
+│   └── AppRoutes.tsx
+└── .env
 ```
