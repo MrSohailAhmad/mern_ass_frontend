@@ -52,11 +52,11 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
           )}
           {role === UserRole.ADMIN && (
             <>
-              <Menu.Item key="admin-docs" icon={<UserOutlined />}>
-                <Link to="/admin/doctors">Manage Doctors</Link>
-              </Menu.Item>
               <Menu.Item key="admin-appts" icon={<TeamOutlined />}>
                 <Link to="/admin">Manage Appointments</Link>
+              </Menu.Item>
+              <Menu.Item key="admin-docs" icon={<UserOutlined />}>
+                <Link to="/admin/doctors">Manage Doctors</Link>
               </Menu.Item>
             </>
           )}

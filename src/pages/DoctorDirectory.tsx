@@ -94,11 +94,11 @@ const DoctorDirectory = () => {
               <p>
                 <strong>Availability:</strong> {doc.availability.join(", ")}
               </p>
-              <Button
+              {/* <Button
                 onClick={() => alert(`Book appointment with ${doc.name}`)}
               >
                 Book Appointment
-              </Button>
+              </Button> */}
             </Card>
           </List.Item>
         )}

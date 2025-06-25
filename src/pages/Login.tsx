@@ -13,11 +13,15 @@ const Login = () => {
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Login successful");
       navigate("/admin");
+      window.location.reload();
     } catch (err) {
       console.error(err);
-      alert(`Login failed due to : ${error?.message}`);
+      let message = "an unknown error";
+      if (err instanceof Error) {
+        message = err.message;
+      }
+      alert(`Login failed due to ${message}`);
     }
   };
 
