@@ -2,6 +2,7 @@ import { Button, Form, Input, Typography } from "antd";
 
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
+import { UserRole } from "../interface/comon";
 
 const { Title } = Typography;
 
@@ -12,8 +13,11 @@ const Login = () => {
       const res = await axiosInstance.post("/api/auth/login", values);
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      navigate("/admin");
+      if (res.data.user.role === UserRole.ADMIN) {
+        navigate("/admin");
+      } else if (res.data.user.role === UserRole.ADMIN) {
+        navigate("/user");
+      }
       window.location.reload();
     } catch (err) {
       console.error(err);
@@ -26,14 +30,10 @@ const Login = () => {
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 500,
-        margin: "auto",
-        paddingTop: "5rem",
-      }}
-    >
-      <Title level={2}>Login</Title>
+    <div style={{ maxWidth: 400, margin: "auto", paddingTop: "5rem" }}>
+      <Title style={{ textAlign: "center" }} level={1}>
+        Login
+      </Title>
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item label="Email" name="email" rules={[{ required: true }]}>
           <Input />
