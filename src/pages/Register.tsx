@@ -21,7 +21,9 @@ const Register = () => {
 
   return (
     <div style={{ maxWidth: 400, margin: "auto", paddingTop: "5rem" }}>
-      <Title level={2}>Register</Title>
+      <Title style={{ textAlign: "center" }} level={1}>
+        Register
+      </Title>
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item label="Name" name="name" rules={[{ required: true }]}>
           <Input />

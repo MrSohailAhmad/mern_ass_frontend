@@ -167,7 +167,7 @@ const AdminAppointments = () => {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <Title level={2}>Manage Appointments (Admin)</Title>
+      <Title level={4}>Manage Appointments (Admin)</Title>
       <Button
         type="primary"
         onClick={() => setModalOpen(true)}

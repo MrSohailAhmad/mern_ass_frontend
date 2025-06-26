@@ -1,15 +1,8 @@
-import {
-  Card,
-  Input,
-  List,
-  Typography,
-  Button,
-  Pagination,
-  message,
-} from "antd";
+import { Card, Input, List, Pagination, Typography, message } from "antd";
 
 import { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
+import { toast } from "react-toastify";
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -47,7 +40,7 @@ const DoctorDirectory = () => {
       setTotalPages(res.data.totalPages);
       setTotalDoctors(res.data.total);
     } catch (error) {
-      message.error("Failed to load doctors");
+      toast.error("Failed to load doctors");
     } finally {
       setLoading(false);
     }
@@ -60,7 +53,7 @@ const DoctorDirectory = () => {
   console.log("doctors", doctors);
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div>
       <Title level={2}>Doctor Directory</Title>
 
       <Search
