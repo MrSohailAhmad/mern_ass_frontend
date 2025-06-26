@@ -7,10 +7,12 @@ import {
   Select,
   Space,
   message,
+  Pagination,
 } from "antd";
 
 import { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 
@@ -29,17 +31,28 @@ const AdminDoctors = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   const [form] = Form.useForm();
-
-  const fetchDoctors = async () => {
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalDoctors, setTotalDoctors] = useState(0);
+  const [search, setSearch] = useState<string>("");
+  const fetchDoctors = async (searchTerm = "", pageNum = 1) => {
     try {
-      setLoading(true);
       const token = localStorage.getItem("accessToken");
-      const res = await axiosInstance.get("/api/doctors", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setDoctors(res.data);
-    } catch (err) {
-      message.error("Failed to load doctors");
+      setLoading(true);
+      const res = await axiosInstance.get(
+        `/api/doctors/all?search=${searchTerm}&page=${pageNum}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setDoctors(res.data.doctors);
+      setTotalPages(res.data.totalPages);
+      setTotalDoctors(res.data.total);
+    } catch (error) {
+      toast.error("Failed to load doctors");
     } finally {
       setLoading(false);
     }
@@ -56,17 +69,17 @@ const AdminDoctors = () => {
           values,
           config
         );
-        message.success("Doctor updated");
+        toast.success("Doctor updated");
       } else {
         await axiosInstance.post("/api/doctors", values, config);
-        message.success("Doctor added");
+        toast.success("Doctor added");
       }
       fetchDoctors();
       setModalOpen(false);
       form.resetFields();
       setEditingDoctor(null);
     } catch (err) {
-      message.error("Failed to save doctor");
+      toast.error("Failed to save doctor");
     }
   };
 
@@ -76,7 +89,7 @@ const AdminDoctors = () => {
       await axiosInstance.delete(`/api/doctors/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      message.success("Doctor deleted");
+      toast.success("Doctor deleted");
       fetchDoctors();
     } catch (err) {
       message.error("Failed to delete doctor");
@@ -90,20 +103,46 @@ const AdminDoctors = () => {
   };
 
   useEffect(() => {
-    fetchDoctors();
-  }, []);
+    fetchDoctors(search, page);
+  }, [search, page]);
 
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ width: "100%", padding: "2rem" }}>
       <h2>Doctor Management (Admin)</h2>
-      <Button
-        type="primary"
-        onClick={() => setModalOpen(true)}
-        style={{ marginBottom: 16 }}
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "between",
+        }}
       >
-        Add Doctor
-      </Button>
-      <Table dataSource={doctors} rowKey="_id" loading={loading}>
+        <Button
+          type="primary"
+          onClick={() => setModalOpen(true)}
+          style={{ marginBottom: 16 }}
+        >
+          Add Doctor
+        </Button>
+        <Input.Search
+          placeholder="Search doctors..."
+          allowClear
+          enterButton="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onSearch={(value) => {
+            setPage(1); // Reset to page 1 on new search
+            fetchDoctors(value, 1);
+          }}
+          style={{ width: 300, marginBottom: 16, marginLeft: "auto" }}
+        />
+      </div>
+      <Table
+        dataSource={doctors}
+        pagination={false}
+        rowKey="_id"
+        loading={loading}
+      >
         <Table.Column title="Name" dataIndex="name" />
         <Table.Column title="Specialty" dataIndex="specialty" />
         <Table.Column title="Location" dataIndex="location" />
@@ -125,6 +164,16 @@ const AdminDoctors = () => {
           )}
         />
       </Table>
+      <Pagination
+        current={page}
+        total={totalDoctors}
+        pageSize={limit}
+        onChange={(newPage) => {
+          setPage(newPage);
+          fetchDoctors("", newPage);
+        }}
+        style={{ textAlign: "center", marginTop: 20 }}
+      />
 
       <Modal
         open={modalOpen}
