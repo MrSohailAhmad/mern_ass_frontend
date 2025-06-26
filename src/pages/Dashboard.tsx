@@ -38,11 +38,6 @@ const Dashboard = () => {
           icon: <UserOutlined />,
           label: <Link to="/admin/doctors">Manage Doctors</Link>,
         },
-        {
-          key: "/admin/doctors-directory",
-          icon: <TeamOutlined />,
-          label: <Link to="/admin/doctors-directory">Doctor Directory</Link>,
-        },
       ]
     : [
         {
