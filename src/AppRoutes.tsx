@@ -49,7 +49,6 @@ const AppRoutes = () => {
         <Route path="/admin" element={<Dashboard />}>
           <Route index element={<AdminAppointments />} />
           <Route path="doctors" element={<AdminDoctors />} />
-          <Route path="doctors-directory" element={<DoctorDirectory />} />
         </Route>
       )}
 
