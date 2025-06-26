@@ -9,14 +9,14 @@ import MyAppointments from "./pages/MyAppointments";
 import AdminAppointments from "./pages/AdminAppointments";
 import AdminDoctors from "./pages/AdminDoctors";
 import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/NotFound"; // optional
-import Unauthorized from "./pages/Unauthorized"; // optional
+import NotFound from "./pages/NotFound";
+import Unauthorized from "./pages/Unauthorized";
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
-  console.log("user.role ", user?.role);
+
   return (
     <Routes>
       {/* Public routes */}
@@ -26,9 +26,7 @@ const AppRoutes = () => {
           !user ? (
             <Login />
           ) : (
-            <Navigate
-              to={user.role === UserRole.ADMIN ? "/admin" : "/my-appointments"}
-            />
+            <Navigate to={user.role === UserRole.ADMIN ? "/admin" : "/user"} />
           )
         }
       />
@@ -38,56 +36,22 @@ const AppRoutes = () => {
       />
       <Route path="/doctors" element={<DoctorDirectory />} />
 
-      {/* User routes */}
-      <Route
-        path="/my-appointments"
-        element={
-          user ? (
-            user.role === UserRole.USER ? (
-              <MyAppointments />
-            ) : (
-              <Navigate to="/unauthorized" />
-            )
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
+      {/* User Dashboard Routes */}
+      {user?.role === UserRole.USER && (
+        <Route path="/user" element={<Dashboard />}>
+          <Route index element={<MyAppointments />} />
+          <Route path="doctors" element={<DoctorDirectory />} />
+        </Route>
+      )}
 
-      {/* Admin routes */}
-      <Route
-        path="/admin"
-        element={
-          user ? (
-            user.role === UserRole.ADMIN ? (
-              <Dashboard>
-                <AdminAppointments />
-              </Dashboard>
-            ) : (
-              <Navigate to="/unauthorized" />
-            )
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
-
-      <Route
-        path="/admin/doctors"
-        element={
-          user ? (
-            user.role === UserRole.ADMIN ? (
-              <Dashboard>
-                <AdminDoctors />
-              </Dashboard>
-            ) : (
-              <Navigate to="/unauthorized" />
-            )
-          ) : (
-            <Navigate to="/" />
-          )
-        }
-      />
+      {/* Admin Dashboard Routes */}
+      {user?.role === UserRole.ADMIN && (
+        <Route path="/admin" element={<Dashboard />}>
+          <Route index element={<AdminAppointments />} />
+          <Route path="doctors" element={<AdminDoctors />} />
+          <Route path="doctors-directory" element={<DoctorDirectory />} />
+        </Route>
+      )}
 
       {/* Fallbacks */}
       <Route path="/unauthorized" element={<Unauthorized />} />

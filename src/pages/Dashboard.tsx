@@ -1,31 +1,61 @@
 import { Layout, Menu, Button } from "antd";
 import {
   CalendarOutlined,
+  TeamOutlined,
   UserOutlined,
   LogoutOutlined,
-  TeamOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { UserRole } from "../interface/comon";
 
 const { Header, Sider, Content } = Layout;
 
-const Dashboard = ({ children }: { children: React.ReactNode }) => {
+const Dashboard = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
 
   const logout = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
     setUser(null);
     navigate("/");
   };
 
-  const role = user?.role;
+  const isAdmin = user?.role === UserRole.ADMIN;
 
-  console.log(user);
+  const menuItems = isAdmin
+    ? [
+        {
+          key: "/admin",
+          icon: <CalendarOutlined />,
+          label: <Link to="/admin">Manage Appointments</Link>,
+        },
+        {
+          key: "/admin/doctors",
+          icon: <UserOutlined />,
+          label: <Link to="/admin/doctors">Manage Doctors</Link>,
+        },
+        {
+          key: "/admin/doctors-directory",
+          icon: <TeamOutlined />,
+          label: <Link to="/admin/doctors-directory">Doctor Directory</Link>,
+        },
+      ]
+    : [
+        {
+          key: "/user",
+          icon: <CalendarOutlined />,
+          label: <Link to="/user">My Appointments</Link>,
+        },
+        {
+          key: "/user/doctors",
+          icon: <TeamOutlined />,
+          label: <Link to="/user/doctors">Doctor Directory</Link>,
+        },
+      ];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -35,36 +65,24 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
           style={{
             color: "white",
             textAlign: "center",
+            fontSize: "1.2rem",
             padding: "1rem",
             fontWeight: "bold",
           }}
         >
-          Dashboard
+          🩺 Dashboard
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="home" icon={<HomeOutlined />}>
-            <Link to="/doctors">Doctor Directory</Link>
-          </Menu.Item>
-          {role === UserRole.USER && (
-            <Menu.Item key="appointments" icon={<CalendarOutlined />}>
-              <Link to="/my-appointments">My Appointments</Link>
-            </Menu.Item>
-          )}
-          {role === UserRole.ADMIN && (
-            <>
-              <Menu.Item key="admin-appts" icon={<TeamOutlined />}>
-                <Link to="/admin">Manage Appointments</Link>
-              </Menu.Item>
-              <Menu.Item key="admin-docs" icon={<UserOutlined />}>
-                <Link to="/admin/doctors">Manage Doctors</Link>
-              </Menu.Item>
-            </>
-          )}
-        </Menu>
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          items={menuItems}
+        />
       </Sider>
 
-      {/* Main Content Area */}
+      {/* Main Layout */}
       <Layout>
+        {/* Top Navbar */}
         <Header
           style={{
             background: "#fff",
@@ -75,16 +93,18 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
           }}
         >
           <div>
-            Welcome, <strong>{user?.name}</strong>
+            👋 Welcome, <strong>{user?.name}</strong>
           </div>
           <Button icon={<LogoutOutlined />} onClick={logout}>
             Logout
           </Button>
         </Header>
+
+        {/* Main Content */}
         <Content
           style={{ margin: "1rem", padding: "1rem", background: "#fff" }}
         >
-          {children}
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
