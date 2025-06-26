@@ -2,6 +2,7 @@ import { Button, Form, Input, Typography } from "antd";
 
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
+import { toast } from "react-toastify";
 
 const { Title } = Typography;
 
@@ -15,7 +16,7 @@ const Register = () => {
       navigate("/");
     } catch (error: any) {
       console.error(error);
-      alert(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 
