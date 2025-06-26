@@ -1,18 +1,17 @@
 import {
-  Table,
   Button,
-  Modal,
   Form,
   Input,
+  Modal,
+  Pagination,
   Select,
   Space,
-  message,
-  Pagination,
+  Table,
 } from "antd";
 
 import { useEffect, useState } from "react";
-import axiosInstance from "../services/axiosInstance";
 import { toast } from "react-toastify";
+import axiosInstance from "../services/axiosInstance";
 
 const { Option } = Select;
 
@@ -92,7 +91,7 @@ const AdminDoctors = () => {
       toast.success("Doctor deleted");
       fetchDoctors();
     } catch (err) {
-      message.error("Failed to delete doctor");
+      toast.error("Failed to delete doctor");
     }
   };
 

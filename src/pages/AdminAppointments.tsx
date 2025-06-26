@@ -1,6 +1,7 @@
-import { Select, Table, Tag, Typography, message } from "antd";
+import { Select, Table, Tag, Typography } from "antd";
 
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import type { Appointment } from "../interface/comon";
 import axiosInstance from "../services/axiosInstance";
 
@@ -28,7 +29,7 @@ const AdminAppointments = () => {
       });
       setAppointments(res.data);
     } catch (err) {
-      message.error("Failed to fetch appointments");
+      toast.error("Failed to fetch appointments");
     } finally {
       setLoading(false);
     }
@@ -46,10 +47,10 @@ const AdminAppointments = () => {
           },
         }
       );
-      message.success("Status updated!");
+      toast.success("Status updated!");
       fetchAppointments(); // refresh data
     } catch (err) {
-      message.error("Failed to update status");
+      toast.error("Failed to update status");
     }
   };
 

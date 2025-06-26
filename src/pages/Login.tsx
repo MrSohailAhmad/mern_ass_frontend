@@ -3,6 +3,7 @@ import { Button, Form, Input, Typography } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
 import { UserRole } from "../interface/comon";
+import { toast } from "react-toastify";
 
 const { Title } = Typography;
 
@@ -25,7 +26,7 @@ const Login = () => {
       if (err instanceof Error) {
         message = err.message;
       }
-      alert(`Login failed due to ${message}`);
+      toast.error(`Login failed due to ${message}`);
     }
   };
 

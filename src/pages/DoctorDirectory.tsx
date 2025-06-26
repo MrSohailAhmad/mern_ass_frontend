@@ -40,7 +40,9 @@ const DoctorDirectory = () => {
       setTotalPages(res.data.totalPages);
       setTotalDoctors(res.data.total);
     } catch (error) {
-      toast.error("Failed to load doctors");
+      toast.error(
+        `Failed to load doctors due to : ${error?.response?.data.message}`
+      );
     } finally {
       setLoading(false);
     }
